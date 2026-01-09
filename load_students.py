@@ -158,10 +158,13 @@ def load_students_from_csv(csv_file='students.csv'):
                     first_name = ' '.join(name_parts[:-1]) if len(name_parts) > 1 else name_parts[0] if name_parts else ''
                     last_name = name_parts[-1] if name_parts else ''
                     
+                    # Create email: firstname.lastname@trinity.edu
+                    email = f'{first_name_part.lower()}.{last_name.lower()}@trinity.edu'
+                    
                     # Create user
                     user = User.objects.create_user(
                         username=matric_no,
-                        email=f'{matric_no}@trinity.edu',
+                        email=email,
                         password=password,
                         first_name=first_name,
                         last_name=last_name
