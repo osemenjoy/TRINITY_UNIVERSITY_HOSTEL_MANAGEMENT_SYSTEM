@@ -1,0 +1,212 @@
+[
+  {
+    "model": "hostels.hostel",
+    "pk": 1,
+    "fields": {
+      "name": "Mary",
+      "gender": "F",
+      "description": "Female hostel - Mary",
+      "created_at": "2024-01-09T00:00:00Z",
+      "updated_at": "2024-01-09T00:00:00Z"
+    }
+  },
+  {
+    "model": "hostels.hostel",
+    "pk": 2,
+    "fields": {
+      "name": "Esther",
+      "gender": "F",
+      "description": "Female hostel - Esther",
+      "created_at": "2024-01-09T00:00:00Z",
+      "updated_at": "2024-01-09T00:00:00Z"
+    }
+  },
+  {
+    "model": "hostels.hostel",
+    "pk": 3,
+    "fields": {
+      "name": "Deborah",
+      "gender": "F",
+      "description": "Female hostel - Deborah",
+      "created_at": "2024-01-09T00:00:00Z",
+      "updated_at": "2024-01-09T00:00:00Z"
+    }
+  },
+  {
+    "model": "hostels.hostel",
+    "pk": 4,
+    "fields": {
+      "name": "Dorcas",
+      "gender": "F",
+      "description": "Female hostel - Dorcas",
+      "created_at": "2024-01-09T00:00:00Z",
+      "updated_at": "2024-01-09T00:00:00Z"
+    }
+  },
+  {
+    "model": "hostels.hostel",
+    "pk": 5,
+    "fields": {
+      "name": "Daniel",
+      "gender": "M",
+      "description": "Male hostel - Daniel",
+      "created_at": "2024-01-09T00:00:00Z",
+      "updated_at": "2024-01-09T00:00:00Z"
+    }
+  },
+  {
+    "model": "hostels.hostel",
+    "pk": 6,
+    "fields": {
+      "name": "Joseph",
+      "gender": "M",
+      "description": "Male hostel - Joseph",
+      "created_at": "2024-01-09T00:00:00Z",
+      "updated_at": "2024-01-09T00:00:00Z"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 1,
+    "fields": {
+      "hostel": 1,
+      "floor_type": "GF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 2,
+    "fields": {
+      "hostel": 1,
+      "floor_type": "FF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 3,
+    "fields": {
+      "hostel": 1,
+      "floor_type": "SF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 4,
+    "fields": {
+      "hostel": 2,
+      "floor_type": "GF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 5,
+    "fields": {
+      "hostel": 2,
+      "floor_type": "FF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 6,
+    "fields": {
+      "hostel": 2,
+      "floor_type": "SF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 7,
+    "fields": {
+      "hostel": 3,
+      "floor_type": "GF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 8,
+    "fields": {
+      "hostel": 3,
+      "floor_type": "FF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 9,
+    "fields": {
+      "hostel": 3,
+      "floor_type": "SF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 10,
+    "fields": {
+      "hostel": 4,
+      "floor_type": "GF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 11,
+    "fields": {
+      "hostel": 4,
+      "floor_type": "FF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 12,
+    "fields": {
+      "hostel": 4,
+      "floor_type": "SF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 13,
+    "fields": {
+      "hostel": 5,
+      "floor_type": "GF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 14,
+    "fields": {
+      "hostel": 5,
+      "floor_type": "FF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 15,
+    "fields": {
+      "hostel": 5,
+      "floor_type": "SF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 16,
+    "fields": {
+      "hostel": 6,
+      "floor_type": "GF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 17,
+    "fields": {
+      "hostel": 6,
+      "floor_type": "FF"
+    }
+  },
+  {
+    "model": "hostels.floor",
+    "pk": 18,
+    "fields": {
+      "hostel": 6,
+      "floor_type": "SF"
+    }
+  }
+]

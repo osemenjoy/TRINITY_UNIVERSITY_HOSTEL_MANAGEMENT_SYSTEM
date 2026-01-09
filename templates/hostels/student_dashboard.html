@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Trinity Hostel Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="row align-items-center mb-4">
+        <div class="col">
+            <h1 style="color: #1f2937; font-weight: 700;"><i class="bi bi-speedometer2"></i> My Dashboard</h1>
+            <p class="text-muted">Welcome back, {{ student.user.get_full_name }}!</p>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'request_hostel' %}" class="btn btn-primary">
+                <i class="bi bi-plus-circle"></i> New Request
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <!-- Student Info Card -->
+    <div class="col-lg-5 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <i class="bi bi-person-badge"></i> Your Profile
+            </div>
+            <div class="card-body">
+                <div class="row mb-4">
+                    <div class="col-sm-5 fw-bold text-muted">Full Name:</div>
+                    <div class="col-sm-7">{{ student.user.get_full_name }}</div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-sm-5 fw-bold text-muted">Matric Number:</div>
+                    <div class="col-sm-7"><span class="badge badge-primary" style="background: linear-gradient(135deg, #6366f1, #8b5cf6); padding: 0.5rem 1rem;">{{ student.matric_no }}</span></div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-sm-5 fw-bold text-muted">Level:</div>
+                    <div class="col-sm-7">{{ student.get_level_display }}</div>
+                </div>
+                <div class="row mb-4">
+                    <div class="col-sm-5 fw-bold text-muted">Gender:</div>
+                    <div class="col-sm-7">
+                        {% if student.gender == 'M' %}
+                            <i class="bi bi-person-fill" style="color: #3b82f6;"></i> Male
+                        {% else %}
+                            <i class="bi bi-person-fill" style="color: #ec4899;"></i> Female
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5 fw-bold text-muted">Email:</div>
+                    <div class="col-sm-7">{{ student.user.email }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hostel Request Status -->
+    <div class="col-lg-7 mb-4">
+        <div class="card h-100">
+            <div class="card-header">
+                <i class="bi bi-file-text"></i> Request Status
+            </div>
+            <div class="card-body">
+                {% if current_request %}
+                    <div style="padding: 1.5rem; border-radius: 0.75rem; background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(34, 197, 94, 0.1)); border-left: 4px solid #10b981; margin-bottom: 1.5rem;">
+                        <div class="mb-2">
+                            <span class="badge badge-approved">
+                                <i class="bi bi-clock-history"></i> {{ current_request.get_status_display }}
+                            </span>
+                        </div>
+                        <p class="mb-0 text-muted">Your request is being reviewed by the administration team.</p>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-sm-5 fw-bold text-muted">Hostel:</div>
+                        <div class="col-sm-7">
+                            <i class="bi bi-building" style="color: #6366f1;"></i> {{ current_request.hostel.name }}
+                        </div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-5 fw-bold text-muted">Room Capacity:</div>
+                        <div class="col-sm-7">{{ current_request.preferred_capacity }} persons</div>
+                    </div>
+                    <div class="row mb-3">
+                        <div class="col-sm-5 fw-bold text-muted">Submitted:</div>
+                        <div class="col-sm-7">{{ current_request.created_at|date:"M d, Y" }}</div>
+                    </div>
+                    {% if current_request.note %}
+                    <div class="row">
+                        <div class="col-sm-5 fw-bold text-muted">Note:</div>
+                        <div class="col-sm-7"><em>{{ current_request.note }}</em></div>
+                    </div>
+                    {% endif %}
+                {% else %}
+                    <div style="padding: 2rem; border-radius: 0.75rem; background: #f3f4f6; text-align: center;">
+                        <div style="font-size: 2.5rem; color: #9ca3af; margin-bottom: 1rem;">
+                            <i class="bi bi-inbox"></i>
+                        </div>
+                        <p class="text-muted mb-3">No active requests yet</p>
+                        <a href="{% url 'request_hostel' %}" class="btn btn-primary">
+                            <i class="bi bi-pencil-square"></i> Submit Your First Request
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+<!-- Allocation Card -->
+{% if allocation %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card" style="border-left: 4px solid #10b981;">
+            <div class="card-header" style="background: linear-gradient(135deg, #10b981, #059669); color: white;">
+                <i class="bi bi-check-circle"></i> Room Allocation
+            </div>
+            <div class="card-body">
+                <div class="alert alert-success" role="alert" style="background-color: #ecfdf5; border: 1px solid #a7f3d0;">
+                    <i class="bi bi-check-circle"></i> <strong>Congratulations!</strong> You have been allocated a room.
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p class="text-muted small">Hostel</p>
+                        <h5 class="mb-0"><i class="bi bi-building"></i> {{ allocation.room.floor.hostel.name }}</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small">Floor</p>
+                        <h5 class="mb-0">{{ allocation.room.floor.get_floor_type_display }}</h5>
+                    </div>
+                </div>
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <p class="text-muted small">Room Number</p>
+                        <h5 class="mb-0">{{ allocation.room.room_number }}</h5>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="text-muted small">Room Capacity</p>
+                        <h5 class="mb-0">{{ allocation.room.capacity }} persons</h5>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <p class="text-muted small">Allocation Date</p>
+                        <h5 class="mb-0">{{ allocation.date_allocated|date:"M d, Y" }}</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% elif current_request.status == 'APPROVED' %}
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card" style="border-left: 4px solid #f59e0b;">
+            <div class="card-header" style="background: linear-gradient(135deg, #f59e0b, #d97706); color: white;">
+                <i class="bi bi-hourglass-split"></i> Allocation Pending
+            </div>
+            <div class="card-body">
+                <p class="mb-0"><i class="bi bi-info-circle"></i> Your request has been approved. Room allocation details will be updated shortly.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% endblock %}

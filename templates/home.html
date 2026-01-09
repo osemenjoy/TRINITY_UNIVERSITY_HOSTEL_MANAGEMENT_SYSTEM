@@ -1,0 +1,378 @@
+{% extends "base.html" %}
+
+{% block title %}Home - Trinity Hostel Management System{% endblock %}
+
+{% block content %}
+<!-- Modern Hero Section -->
+<div class="container-fluid" style="background: linear-gradient(135deg, #0f766e 0%, #155e75 50%, #1e40af 100%); position: relative; overflow: hidden;">
+    <!-- Animated background elements -->
+    <div style="position: absolute; top: -50%; left: -10%; width: 600px; height: 600px; background: rgba(255, 255, 255, 0.05); border-radius: 50%; animation: float 6s ease-in-out infinite;"></div>
+    <div style="position: absolute; bottom: -30%; right: -5%; width: 500px; height: 500px; background: rgba(255, 255, 255, 0.05); border-radius: 50%; animation: float 8s ease-in-out infinite reverse;"></div>
+    
+    <div class="container py-5 position-relative" style="z-index: 1;">
+        <div class="row align-items-center py-5">
+            <div class="col-lg-8 mx-auto text-center">
+                <div class="mb-4 animate__animated animate__fadeInDown">
+                    <i class="bi bi-building" style="font-size: 5rem; color: white;"></i>
+                </div>
+                <h1 class="display-3 fw-bold mb-3 text-white animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                    Trinity University<br>Hostel Management
+                </h1>
+                <p class="lead mb-5 text-white animate__animated animate__fadeInUp" style="font-size: 1.3rem; animation-delay: 0.4s; opacity: 0.95;">
+                    Smart allocation • Real-time tracking • Seamless accommodation management
+                </p>
+                
+                {% if user.is_authenticated %}
+                    <div class="d-flex gap-3 justify-content-center flex-wrap animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+                        {% if user.is_staff %}
+                            <a href="{% url 'admin_requests' %}" class="btn btn-light btn-lg px-4" style="border-radius: 0.75rem; font-weight: 600; transition: all 0.3s ease;">
+                                <i class="bi bi-list-check"></i> Manage Requests
+                            </a>
+                            <a href="{% url 'allocation_overview' %}" class="btn btn-outline-light btn-lg px-4" style="border-radius: 0.75rem; font-weight: 600; transition: all 0.3s ease;">
+                                <i class="bi bi-diagram-3"></i> View Allocations
+                            </a>
+                        {% else %}
+                            <a href="{% url 'student_dashboard' %}" class="btn btn-light btn-lg px-4" style="border-radius: 0.75rem; font-weight: 600; transition: all 0.3s ease;">
+                                <i class="bi bi-speedometer2"></i> My Dashboard
+                            </a>
+                            <a href="{% url 'request_hostel' %}" class="btn btn-outline-light btn-lg px-4" style="border-radius: 0.75rem; font-weight: 600; transition: all 0.3s ease;">
+                                <i class="bi bi-pencil-square"></i> Request Hostel
+                            </a>
+                        {% endif %}
+                    </div>
+                {% else %}
+                    <div class="animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+                        <a href="{% url 'login' %}" class="btn btn-light btn-lg px-5" style="border-radius: 0.75rem; font-weight: 600; transition: all 0.3s ease;">
+                            <i class="bi bi-box-arrow-in-right"></i> Login to Continue
+                        </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(30px); }
+    }
+    
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
+    }
+</style>
+
+<!-- Stats Section -->
+{% if user.is_authenticated %}
+<div class="container py-5">
+    <div class="row mb-5">
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 text-center shadow-sm" style="border: none; border-radius: 1rem; background: linear-gradient(135deg, #0f766e, #14b8a6); overflow: hidden;">
+                <div class="card-body text-white p-4">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">
+                        <i class="bi bi-house-fill"></i>
+                    </div>
+                    <h3 class="card-title fw-bold mb-2">6</h3>
+                    <p class="card-text mb-0">Hostels</p>
+                    <small style="opacity: 0.9;">3 Female • 3 Male</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 text-center shadow-sm" style="border: none; border-radius: 1rem; background: linear-gradient(135deg, #10b981, #059669); overflow: hidden;">
+                <div class="card-body text-white p-4">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">
+                        <i class="bi bi-door-closed"></i>
+                    </div>
+                    <h3 class="card-title fw-bold mb-2">72</h3>
+                    <p class="card-text mb-0">Rooms</p>
+                    <small style="opacity: 0.9;">Capacity: 432 beds</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 text-center shadow-sm" style="border: none; border-radius: 1rem; background: linear-gradient(135deg, #f59e0b, #d97706); overflow: hidden;">
+                <div class="card-body text-white p-4">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">
+                        <i class="bi bi-speedometer2"></i>
+                    </div>
+                    <h3 class="card-title fw-bold mb-2">100%</h3>
+                    <p class="card-text mb-0">Uptime</p>
+                    <small style="opacity: 0.9;">Reliable service</small>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 mb-4">
+            <div class="card h-100 text-center shadow-sm" style="border: none; border-radius: 1rem; background: linear-gradient(135deg, #ec4899, #db2777); overflow: hidden;">
+                <div class="card-body text-white p-4">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">
+                        <i class="bi bi-lightning-fill"></i>
+                    </div>
+                    <h3 class="card-title fw-bold mb-2">Instant</h3>
+                    <p class="card-text mb-0">Processing</p>
+                    <small style="opacity: 0.9;">Real-time allocation</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- How It Works Section -->
+<div class="container py-5">
+    <div style="text-align: center; margin-bottom: 3rem;">
+        <h2 class="display-5 fw-bold mb-3" style="color: #1f2937;">How It Works</h2>
+        <p class="lead text-muted">Simple and streamlined process for accommodation management</p>
+    </div>
+    
+    {% if user.is_staff %}
+    <!-- Admin Workflow -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm" style="border: none; border-radius: 1.25rem; border-left: 5px solid #0f766e;">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #0f766e, #14b8a6); border-radius: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 1.5rem;">
+                            <i class="bi bi-list-check text-white" style="font-size: 1.75rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title fw-bold mb-2" style="color: #1f2937;">Review Requests</h5>
+                            <p class="card-text text-muted mb-0">Check all pending hostel requests from students. Filter, search, and manage applications efficiently.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm" style="border: none; border-radius: 1.25rem; border-left: 5px solid #10b981;">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 1.5rem;">
+                            <i class="bi bi-check-circle text-white" style="font-size: 1.75rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title fw-bold mb-2" style="color: #1f2937;">Approve & Allocate</h5>
+                            <p class="card-text text-muted mb-0">Approve requests with one click. System automatically allocates best available rooms based on preferences.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm" style="border: none; border-radius: 1.25rem; border-left: 5px solid #f59e0b;">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 1.5rem;">
+                            <i class="bi bi-diagram-3 text-white" style="font-size: 1.75rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title fw-bold mb-2" style="color: #1f2937;">Monitor Statistics</h5>
+                            <p class="card-text text-muted mb-0">Track occupancy rates and allocation overview across all hostels in real-time.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm" style="border: none; border-radius: 1.25rem; border-left: 5px solid #8b5cf6;">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #8b5cf6, #6366f1); border-radius: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 1.5rem;">
+                            <i class="bi bi-gear text-white" style="font-size: 1.75rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title fw-bold mb-2" style="color: #1f2937;">Full Management</h5>
+                            <p class="card-text text-muted mb-0">Complete admin interface for hostels, rooms, students, and allocations management.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% else %}
+    <!-- Student Workflow -->
+    <div class="row">
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm" style="border: none; border-radius: 1.25rem; border-left: 5px solid #0f766e;">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #0f766e, #14b8a6); border-radius: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 1.5rem;">
+                            <i class="bi bi-pencil-square text-white" style="font-size: 1.75rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title fw-bold mb-2" style="color: #1f2937;">Submit Request</h5>
+                            <p class="card-text text-muted mb-0">Fill in your preferences, choose hostel and room capacity. Gender-safe filtering ensures appropriate placement.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm" style="border: none; border-radius: 1.25rem; border-left: 5px solid #f59e0b;">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #f59e0b, #d97706); border-radius: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 1.5rem;">
+                            <i class="bi bi-clock-history text-white" style="font-size: 1.75rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title fw-bold mb-2" style="color: #1f2937;">Track Status</h5>
+                            <p class="card-text text-muted mb-0">Monitor request status in real-time. Track journey from Pending → Approved → Allocated with live updates.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm" style="border: none; border-radius: 1.25rem; border-left: 5px solid #10b981;">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 1.5rem;">
+                            <i class="bi bi-check-circle text-white" style="font-size: 1.75rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title fw-bold mb-2" style="color: #1f2937;">Get Allocated</h5>
+                            <p class="card-text text-muted mb-0">Once approved by admin, your room assignment appears on your dashboard immediately with full details.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm" style="border: none; border-radius: 1.25rem; border-left: 5px solid #ec4899;">
+                <div class="card-body p-4">
+                    <div class="d-flex align-items-start">
+                        <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #ec4899, #db2777); border-radius: 1rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-right: 1.5rem;">
+                            <i class="bi bi-info-circle text-white" style="font-size: 1.75rem;"></i>
+                        </div>
+                        <div>
+                            <h5 class="card-title fw-bold mb-2" style="color: #1f2937;">View Availability</h5>
+                            <p class="card-text text-muted mb-0">See real-time available beds per hostel and specific room details before submitting your request.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endif %}
+
+<!-- Welcome Section for Non-Authenticated Users -->
+{% if not user.is_authenticated %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-10 mx-auto">
+            <div style="text-align: center; margin-bottom: 3rem;">
+                <h2 class="display-5 fw-bold mb-3" style="color: #1f2937;">Welcome to Trinity Hostel Management</h2>
+                <p class="lead text-muted">Comprehensive solution for students and administrators</p>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm" style="border: none; border-radius: 1.25rem; border-top: 4px solid #6366f1;">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #0f766e, #14b8a6); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-mortarboard text-white" style="font-size: 1.5rem;"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-0 ms-3" style="color: #1f2937;">For Students</h5>
+                            </div>
+                            <ul class="list-unstyled mt-3">
+                                <li class="mb-2"><i class="bi bi-check-circle" style="color: #0f766e; margin-right: 0.5rem;"></i> <span style="color: #4b5563;">Submit hostel requests easily</span></li>
+                                <li class="mb-2"><i class="bi bi-check-circle" style="color: #0f766e; margin-right: 0.5rem;"></i> <span style="color: #4b5563;">Track request status in real-time</span></li>
+                                <li class="mb-2"><i class="bi bi-check-circle" style="color: #0f766e; margin-right: 0.5rem;"></i> <span style="color: #4b5563;">View room allocations</span></li>
+                                <li class="mb-2"><i class="bi bi-check-circle" style="color: #0f766e; margin-right: 0.5rem;"></i> <span style="color: #4b5563;">Gender-filtered safe hostels</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6 mb-4">
+                    <div class="card h-100 shadow-sm" style="border: none; border-radius: 1.25rem; border-top: 4px solid #10b981;">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div style="width: 50px; height: 50px; background: linear-gradient(135deg, #10b981, #059669); border-radius: 0.75rem; display: flex; align-items: center; justify-content: center;">
+                                    <i class="bi bi-shield-check text-white" style="font-size: 1.5rem;"></i>
+                                </div>
+                                <h5 class="card-title fw-bold mb-0 ms-3" style="color: #1f2937;">For Administration</h5>
+                            </div>
+                            <ul class="list-unstyled mt-3">
+                                <li class="mb-2"><i class="bi bi-check-circle" style="color: #0f766e; margin-right: 0.5rem;"></i> <span style="color: #4b5563;">Manage all student requests</span></li>
+                                <li class="mb-2"><i class="bi bi-check-circle" style="color: #0f766e; margin-right: 0.5rem;"></i> <span style="color: #4b5563;">Approve and reject efficiently</span></li>
+                                <li class="mb-2"><i class="bi bi-check-circle" style="color: #0f766e; margin-right: 0.5rem;"></i> <span style="color: #4b5563;">Automatic smart allocation</span></li>
+                                <li class="mb-2"><i class="bi bi-check-circle" style="color: #0f766e; margin-right: 0.5rem;"></i> <span style="color: #4b5563;">View occupancy statistics</span></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="alert mt-5" role="alert" style="background: linear-gradient(135deg, #f0fdfa 0%, #f0f9ff 100%); border: none; border-radius: 1.25rem; border-left: 5px solid #0f766e;">
+                <div class="d-flex align-items-center">
+                    <div style="font-size: 2.5rem; color: #0f766e; margin-right: 1.5rem; flex-shrink: 0;">
+                        <i class="bi bi-rocket-takeoff"></i>
+                    </div>
+                    <div>
+                        <h5 class="alert-heading mb-2 fw-bold" style="color: #1f2937;">Ready to Get Started?</h5>
+                        <p class="mb-3" style="color: #4b5563;">Login with your Trinity University credentials to access the system and manage your hostel accommodation request.</p>
+                        <a href="{% url 'login' %}" class="btn btn-primary" style="border-radius: 0.75rem; background-color: #0f766e; border-color: #0f766e;">
+                            <i class="bi bi-box-arrow-in-right"></i> Login Now
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<style>
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(30px); }
+    }
+    
+    .btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
+    }
+
+    .card {
+        transition: all 0.3s ease;
+    }
+
+    .card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .display-5 {
+        font-size: 2.8rem;
+    }
+
+    @media (max-width: 768px) {
+        .display-3 {
+            font-size: 2rem;
+        }
+        
+        .display-5 {
+            font-size: 1.8rem;
+        }
+
+        .lead {
+            font-size: 1rem !important;
+        }
+    }
+</style>
+
+{% endblock %}

@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Request Hostel - Trinity Hostel Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="row align-items-center">
+        <div class="col">
+            <h1><i class="bi bi-pencil-square"></i> Submit Hostel Request</h1>
+            <p class="text-muted">Select your preferred hostel and room capacity</p>
+        </div>
+        <div class="col-auto">
+            <a href="{% url 'student_dashboard' %}" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to Dashboard
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-house"></i> Hostel Request Form
+            </div>
+            <div class="card-body">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.hostel.id_for_label }}" class="form-label">
+                            {{ form.hostel.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.hostel }}
+                        {% if form.hostel.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.hostel.errors.0 }}
+                            </div>
+                        {% endif %}
+                        <small class="text-muted d-block mt-1">
+                            <i class="bi bi-info-circle"></i> 
+                            Only hostels for your gender are shown
+                        </small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.preferred_capacity.id_for_label }}" class="form-label">
+                            {{ form.preferred_capacity.label }} <span class="text-danger">*</span>
+                        </label>
+                        {{ form.preferred_capacity }}
+                        {% if form.preferred_capacity.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.preferred_capacity.errors.0 }}
+                            </div>
+                        {% endif %}
+                        <small class="text-muted d-block mt-1">
+                            <i class="bi bi-info-circle"></i> 
+                            Choose your preferred room capacity
+                        </small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.preferred_room.id_for_label }}" class="form-label">
+                            {{ form.preferred_room.label }}
+                        </label>
+                        {{ form.preferred_room }}
+                        {% if form.preferred_room.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.preferred_room.errors.0 }}
+                            </div>
+                        {% endif %}
+                        <small class="text-muted d-block mt-1">
+                            <i class="bi bi-info-circle"></i> 
+                            Select a specific room after choosing hostel and capacity (optional)
+                        </small>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="{{ form.note.id_for_label }}" class="form-label">
+                            {{ form.note.label }}
+                        </label>
+                        {{ form.note }}
+                        {% if form.note.errors %}
+                            <div class="invalid-feedback d-block">
+                                {{ form.note.errors.0 }}
+                            </div>
+                        {% endif %}
+                        <small class="text-muted d-block mt-1">
+                            <i class="bi bi-info-circle"></i> 
+                            Add any special requests or notes (optional)
+                        </small>
+                    </div>
+                    
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger" role="alert">
+                            {% for error in form.non_field_errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                        </div>
+                    {% endif %}
+                    
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-check-circle"></i> Submit Request
+                        </button>
+                        <a href="{% url 'student_dashboard' %}" class="btn btn-outline-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Available Hostels Info -->
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <i class="bi bi-building"></i> Available Hostels
+            </div>
+            <div class="card-body">
+                {% if available_hostels %}
+                    <div class="list-group list-group-flush">
+                        {% for hostel in available_hostels %}
+                            <div class="list-group-item">
+                                <h6 class="mb-2">
+                                    <i class="bi bi-house"></i> {{ hostel.name }}
+                                </h6>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted">
+                                        Available Beds: <strong>{{ hostel.get_available_beds }}</strong>
+                                    </small>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <p class="text-muted text-center">
+                        <i class="bi bi-exclamation-circle"></i> No hostels available for your gender
+                    </p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <i class="bi bi-lightbulb"></i> Tips
+            </div>
+            <div class="card-body small">
+                <ul class="list-unstyled">
+                    <li><i class="bi bi-check-circle text-success"></i> Only hostels matching your gender are available</li>
+                    <li class="mt-2"><i class="bi bi-check-circle text-success"></i> You can only have one active request at a time</li>
+                    <li class="mt-2"><i class="bi bi-check-circle text-success"></i> Wait for admin approval before submitting another request</li>
+                    <li class="mt-2"><i class="bi bi-check-circle text-success"></i> Room allocation will be automatic upon approval</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const hostelSelect = document.getElementById('id_hostel');
+    const capacitySelect = document.getElementById('id_preferred_capacity');
+    const roomSelect = document.getElementById('id_preferred_room');
+    
+    function loadAvailableRooms() {
+        const hostelId = hostelSelect.value;
+        const capacity = capacitySelect.value;
+        
+        // Clear room options
+        roomSelect.innerHTML = '<option value="">-- Select a specific room (optional) --</option>';
+        
+        if (!hostelId || !capacity) {
+            return;
+        }
+        
+        // Fetch available rooms
+        fetch(`/api/rooms/?hostel_id=${hostelId}&capacity=${capacity}`)
+            .then(response => response.json())
+            .then(data => {
+                if (data.rooms) {
+                    data.rooms.forEach(room => {
+                        const option = document.createElement('option');
+                        option.value = room.id;
+                        option.textContent = room.label;
+                        roomSelect.appendChild(option);
+                    });
+                }
+            })
+            .catch(error => console.error('Error loading rooms:', error));
+    }
+    
+    // Load rooms when hostel or capacity changes
+    hostelSelect.addEventListener('change', loadAvailableRooms);
+    capacitySelect.addEventListener('change', loadAvailableRooms);
+    
+    // Load rooms on page load if values are already set
+    if (hostelSelect.value && capacitySelect.value) {
+        loadAvailableRooms();
+    }
+});
+</script>
+
+{% endblock %}
+

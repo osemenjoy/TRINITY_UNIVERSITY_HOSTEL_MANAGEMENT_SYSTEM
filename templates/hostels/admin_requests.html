@@ -1,0 +1,180 @@
+{% extends "base.html" %}
+
+{% block title %}Manage Requests - Trinity Hostel Management{% endblock %}
+
+{% block content %}
+<div class="page-header">
+    <div class="row align-items-center">
+        <div class="col">
+            <h1><i class="bi bi-list-check"></i> Manage Hostel Requests</h1>
+            <p class="text-muted">Review and approve/reject student requests</p>
+        </div>
+    </div>
+</div>
+
+<!-- Statistics -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-primary">{{ total_requests }}</h3>
+                <p class="text-muted mb-0">Total Requests</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-warning">{{ pending_count }}</h3>
+                <p class="text-muted mb-0">Pending</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-success">{{ approved_count }}</h3>
+                <p class="text-muted mb-0">Approved</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card text-center">
+            <div class="card-body">
+                <h3 class="text-danger">{{ rejected_count }}</h3>
+                <p class="text-muted mb-0">Rejected</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-header">
+        <i class="bi bi-funnel"></i> Filters
+    </div>
+    <div class="card-body">
+        <form method="get" class="row g-3">
+            <div class="col-md-4">
+                <label for="hostelFilter" class="form-label">Hostel</label>
+                <select class="form-select" id="hostelFilter" name="hostel">
+                    <option value="">All Hostels</option>
+                    {% for hostel in hostels %}
+                        <option value="{{ hostel.id }}" {% if selected_hostel|stringformat:"s" == hostel.id|stringformat:"s" %}selected{% endif %}>
+                            {{ hostel.name }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label for="statusFilter" class="form-label">Status</label>
+                <select class="form-select" id="statusFilter" name="status">
+                    <option value="">All Status</option>
+                    {% for value, label in status_choices %}
+                        <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>
+                            {{ label }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <label class="form-label">&nbsp;</label>
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Filter
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Requests Table -->
+<div class="card">
+    <div class="card-header">
+        <i class="bi bi-table"></i> Requests List
+    </div>
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Student</th>
+                    <th>Matric No.</th>
+                    <th>Hostel</th>
+                    <th>Capacity</th>
+                    <th>Status</th>
+                    <th>Request Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% if requests %}
+                    {% for request in requests %}
+                        <tr>
+                            <td>
+                                <strong>{{ request.student.user.get_full_name }}</strong>
+                                <br>
+                                <small class="text-muted">{{ request.student.user.email }}</small>
+                            </td>
+                            <td>{{ request.student.matric_no }}</td>
+                            <td>{{ request.hostel.name }}</td>
+                            <td>
+                                <span class="badge bg-info">{{ request.preferred_capacity }} persons</span>
+                            </td>
+                            <td>
+                                {% if request.status == 'PENDING' %}
+                                    <span class="badge badge-warning">{{ request.get_status_display }}</span>
+                                {% elif request.status == 'APPROVED' %}
+                                    <span class="badge bg-success">{{ request.get_status_display }}</span>
+                                {% else %}
+                                    <span class="badge bg-danger">{{ request.get_status_display }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ request.created_at|date:"M d, Y H:i" }}</td>
+                            <td>
+                                {% if request.status == 'PENDING' %}
+                                    <form method="post" action="{% url 'approve_request' request.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-success" title="Approve and allocate">
+                                            <i class="bi bi-check-circle"></i> Approve
+                                        </button>
+                                    </form>
+                                    <form method="post" action="{% url 'reject_request' request.id %}" style="display: inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger" title="Reject request" onclick="return confirm('Are you sure?')">
+                                            <i class="bi bi-x-circle"></i> Reject
+                                        </button>
+                                    </form>
+                                {% else %}
+                                    <span class="text-muted">—</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                        {% if request.note %}
+                        <tr class="table-secondary">
+                            <td colspan="7">
+                                <small>
+                                    <strong>Note:</strong> {{ request.note }}
+                                </small>
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                {% else %}
+                    <tr>
+                        <td colspan="7" class="text-center text-muted py-4">
+                            <i class="bi bi-inbox"></i> No requests found matching the filters
+                        </td>
+                    </tr>
+                {% endif %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    .badge-warning {
+        background-color: #ffc107;
+        color: black;
+    }
+</style>
+
+{% endblock %}
